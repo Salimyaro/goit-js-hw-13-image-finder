@@ -36,24 +36,10 @@ function whenNewSearchQuery(query) {
 }
 
 function onFetchSuccess(data) {
+  let top = refs.gallery.offsetHeight;
   renderPhotoCards(data);
-  console.log("refs.gallery.offsetHeight", refs.gallery.offsetHeight);
-  console.log("window.innerHeight", window.innerHeight);
-  console.log(
-    "document.documentElement.scrollTop",
-    document.documentElement.scrollTop
-  );
-  console.log(
-    "document.documentElement.clientHeight",
-    document.documentElement.clientHeight
-  );
-  console.log("window.scrollY", window.scrollY);
-  document.documentElement.scrollTop + document.documentElement.clientHeight;
-
-  let top = document.documentElement.scrollHeight;
-  console.log("top", top);
   window.scrollTo({
-    top: top,
+    top,
     left: 0,
     behavior: "smooth",
   });

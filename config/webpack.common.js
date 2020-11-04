@@ -71,34 +71,7 @@ module.exports = {
         // type: "asset/resource",
       },
       // Fonts and SVGs: Inline files
-      // { test: /\.(woff(2)?|eot|ttf|otf|svg|)$/, type: "asset/inline" },
-      {
-        test: /\.woff(2)?(\?[a-z0-9#=&.]+)?$/,
-        use: [
-          {
-            loader: "url-loader",
-            options: {
-              name: "[name].[ext]",
-              outputPath: "fonts/",
-              limit: 10000,
-              mimetype: "application/font-woff",
-            },
-          },
-        ],
-      },
-      {
-        test: /\.(ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
-        use: [
-          {
-            loader: "file-loader",
-            options: {
-              name: "[name].[ext]",
-              outputPath: "fonts/",
-            },
-          },
-        ],
-      },
-
+      { test: /\.(woff(2)?|eot|ttf|otf|svg|)$/, type: "asset/inline" },
       {
         test: /\.html$/,
         use: "html-loader",
