@@ -7,4 +7,4 @@ import "material-design-icons/iconfont/material-icons.css";
 defaults.styling = "material";
 defaults.icons = "material";
 defaults.width = "401px";
-defaults.delay = 2000;
+defaults.delay = 1000;
