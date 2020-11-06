@@ -5,7 +5,7 @@ import fetchPhotos from "./js/fetchPhotos";
 import renderPhotoCards from "./js/render";
 
 import "./js/pnotify-cfg";
-import { success } from "@pnotify/core";
+import { success, error } from "@pnotify/core";
 
 import debounce from "lodash.debounce";
 
@@ -22,18 +22,21 @@ let searchQuery = "";
 let page = null;
 const perPage = 12;
 
-function onSearch(e) {
-  e.preventDefault();
-  const newSearchQuery = refs.searchForm.elements.query.value;
-  if (!newSearchQuery) return;
-  if (searchQuery !== newSearchQuery) {
-    whenNewSearchQuery(newSearchQuery);
-  } else {
-    whenOldSearchQuery();
+async function onSearch(e) {
+  try {
+    e.preventDefault();
+    const newSearchQuery = refs.searchForm.elements.query.value;
+    if (!newSearchQuery) return;
+    if (searchQuery !== newSearchQuery) {
+      whenNewSearchQuery(newSearchQuery);
+    } else {
+      whenOldSearchQuery();
+    }
+    const data = await fetchPhotos(searchQuery, page, perPage);
+    onFetchSuccess(data);
+  } catch (e) {
+    onFetchError(e);
   }
-  fetchPhotos(searchQuery, page, perPage)
-    .then(onFetchSuccess)
-    .catch(onFetchError);
 }
 
 function whenNewSearchQuery(query) {
@@ -57,12 +60,13 @@ function onFetchSuccess(data) {
   refs.loadBtn.disabled = false;
 }
 
-function onFetchError(error) {
-  console.log(error);
+function onFetchError(err) {
+  error(`Reboot`);
+  console.log(err.name);
 }
-
 function pnotify(data) {
-  const uploaded = page * perPage;
+  const uploaded = page * perPage - perPage + data.hits.length;
+  if (uploaded > data.totalHits) return;
   success(`Uploaded ${uploaded} images out of ${data.totalHits}`);
 }
 
