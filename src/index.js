@@ -5,7 +5,7 @@ import fetchPhotos from "./js/fetchPhotos";
 import renderPhotoCards from "./js/render";
 
 import "./js/pnotify-cfg";
-import { success, error } from "@pnotify/core";
+import { success, error, notice } from "@pnotify/core";
 
 import debounce from "lodash.debounce";
 
@@ -34,6 +34,7 @@ async function onSearch(e) {
     }
     const data = await fetchPhotos(searchQuery, page, perPage);
     onFetchSuccess(data);
+    loadCheck(data);
   } catch (e) {
     onFetchError(e);
   }
@@ -56,17 +57,20 @@ function onFetchSuccess(data) {
     top,
     behavior: "smooth",
   });
-  pnotify(data);
-  refs.loadBtn.disabled = false;
 }
 
 function onFetchError(err) {
   error(`Reboot`);
   console.log(err.name);
 }
-function pnotify(data) {
+function loadCheck(data) {
   const uploaded = page * perPage - perPage + data.hits.length;
-  if (uploaded > data.totalHits) return;
+  if (uploaded >= data.totalHits) {
+    refs.loadBtn.disabled = true;
+    notice(`Uploaded all images out of ${data.totalHits}`);
+    return;
+  }
+  refs.loadBtn.disabled = false;
   success(`Uploaded ${uploaded} images out of ${data.totalHits}`);
 }
 
