@@ -77,9 +77,7 @@ function loadCheck(data) {
 function onGalleryClick({ target: { nodeName, dataset } }) {
   if (nodeName !== "IMG") return;
   const instance = basicLightbox.create(`
-    <div class="modal">
-        <img src="${dataset.src}">
-    </div>
+    <img src="${dataset.src}">
 `);
   instance.show();
 }
